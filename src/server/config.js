@@ -6,12 +6,10 @@ const config = {
   // Required
   ALVAR_CARTO_ORDER_API_BASE_URL: getRequiredEnv('ALVAR_CARTO_ORDER_API_BASE_URL', string),
   ALVAR_CARTO_ORDER_API_SECRET: getRequiredEnv('ALVAR_CARTO_ORDER_API_SECRET', string),
-  PUBLIC_URL: process.env.PUBLIC_URL,
 
   // Optional
   PORT: getOptionalEnv('PORT', number, 4002),
   ALLOW_HTTP: getOptionalEnv('ALLOW_HTTP', boolean, false),
-
 };
 
 if (_.endsWith(config.ALVAR_CARTO_ORDER_API_BASE_URL, '/')) {

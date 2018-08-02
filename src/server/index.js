@@ -34,9 +34,9 @@ if (!config.ALLOW_HTTP) {
 
 app.use(bodyParser.json())
 
-app.get('/api/promotionCodes', (req, res) => {
+app.get('/api/promotions', (req, res) => {
   request({
-    url: config.ALVAR_CARTO_ORDER_API_BASE_URL + '/api/promotionCodes',
+    url: config.ALVAR_CARTO_ORDER_API_BASE_URL + '/api/promotions',
     headers: {
       'x-api-key': config.ALVAR_CARTO_ORDER_API_SECRET,
     },
