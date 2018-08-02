@@ -1,0 +1,13 @@
+.PromotionsPage__content {
+  padding-top: 50px;
+}
+
+.PromotionsPage__new {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.PromotionsPage__table-section {
+	padding-top: 30px;
+}
