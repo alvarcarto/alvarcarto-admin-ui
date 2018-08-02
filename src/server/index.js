@@ -1,4 +1,5 @@
 const path = require('path')
+const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request-promise')
@@ -31,6 +32,19 @@ if (!config.ALLOW_HTTP) {
   console.warn('Warning, HTTPS is not enforced. DO NOT use this in production!')
 }
 
+if (!config.ALLOW_ACCESS_WITHOUT_KEY) {
+  const validTokens = config.KEYS.split(',')
+  app.use((req, res, next) => {
+    const apiKey = req.headers['x-key'] || req.query.key;
+    if (!_.includes(validTokens, apiKey)) {
+      const err = new Error('Incorrect key.')
+      err.status = 401
+      return next(err)
+    }
+
+    return next();
+  })
+}
 
 app.use(bodyParser.json())
 
