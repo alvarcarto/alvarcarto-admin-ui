@@ -9,7 +9,18 @@
 }
 
 .NavBar__links {
+  flex-direction: row;
 	margin-left: 30px;
 	position: relative;
+  align-items: center;
 	top: 1px;
+}
+
+.NavBar__name {
+  margin-right: 10px;
+}
+
+.NavBar__profile-image {
+  border-radius: 50%;
+  height: 34px;
 }

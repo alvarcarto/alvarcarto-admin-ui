@@ -48,6 +48,14 @@ if (!config.ALLOW_ACCESS_WITHOUT_KEY) {
 
 app.use(bodyParser.json())
 
+app.get('/api/me', (req, res) => {
+  res.json({
+    name: req.headers['x-user-name'],
+    email: req.headers['x-user-email'],
+    photoUrl: req.headers['x-user-photo-url'],
+  })
+})
+
 app.get('/api/promotions', (req, res) => {
   request({
     url: config.ALVAR_CARTO_ORDER_API_BASE_URL + '/api/promotions',
