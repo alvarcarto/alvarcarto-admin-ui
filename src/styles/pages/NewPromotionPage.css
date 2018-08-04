@@ -1,0 +1,7 @@
+.NewPromotionPage__content {
+  padding-top: 50px;
+}
+
+.NewPromotionPage input#promotionCode {
+  text-transform: uppercase;
+}

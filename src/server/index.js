@@ -74,6 +74,25 @@ app.get('/api/promotions', (req, res) => {
     })
 })
 
+app.post('/api/promotions', (req, res) => {
+  request({
+    url: config.ALVAR_CARTO_ORDER_API_BASE_URL + '/api/promotions',
+    headers: {
+      'x-api-key': config.ALVAR_CARTO_ORDER_API_SECRET,
+    },
+    body: req.body,
+    json: true,
+  })
+    .then((response) => {
+      res.json(response)
+    })
+    .catch((err) => {
+      console.error('Error', err)
+      res.status(500)
+      res.send(err)
+    })
+})
+
 app.use('/', express.static(path.join(__dirname, '../../build')))
 app.get('*', (req, res) => {
   const indexPath = path.join(__dirname, '../../build/index.html')
