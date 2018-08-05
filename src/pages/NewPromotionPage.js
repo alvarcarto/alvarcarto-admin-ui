@@ -14,8 +14,18 @@ import {
 import NavBar from '../components/NavBar'
 import { createNewPromotion } from '../util/api'
 
+// XXX: Use proper currency formatter
+function formatMoney(cents) {
+  const val = (cents / 100).toFixed(2)
+  if (_.endsWith(val, '.00')) {
+    return `${Math.round(cents / 100)} €`
+  }
+
+  return `${val} €`
+}
+
 function isEmptyString(val) {
-  return val === '';
+  return val === ''
 }
 
 class NewPromotionPage extends Component {
@@ -27,7 +37,8 @@ class NewPromotionPage extends Component {
       type: 'FIXED',
       expiresAt: '',
       promotionCode: '',
-      maxAllowedUsageCount: '1',
+      maxAllowedUsageCount: 'unlimited',
+      description: '',
       loading: false,
     }
   }
@@ -46,7 +57,7 @@ class NewPromotionPage extends Component {
     event.preventDefault()
 
     const label = this.state.type === 'FIXED'
-      ? `Gift code -${(this.state.value / 100).toFixed(2)}`
+      ? `Gift code -${formatMoney(this.state.value, this.state.currency)}`
       : `Promotion -${Math.round(this.state.value * 100)} %`
 
     createNewPromotion(_.omitBy({
@@ -55,7 +66,10 @@ class NewPromotionPage extends Component {
       value: Number(this.state.value),
       promotionCode: this.state.promotionCode.toUpperCase(),
       expiresAt: this.state.expiresAt,
-      maxAllowedUsageCount: Number(this.state.maxAllowedUsageCount),
+      description: this.state.description,
+      maxAllowedUsageCount: this.state.maxAllowedUsageCount === 'unlimited'
+        ? undefined
+        : Number(this.state.maxAllowedUsageCount),
       currency: 'EUR',
     }, isEmptyString))
       .then((res) => {
@@ -106,12 +120,18 @@ class NewPromotionPage extends Component {
                   <Label for="type">Max usages</Label>
 
                   <Input type="select" name="maxAllowedUsageCount" id="maxAllowedUsageCount" value={this.state.maxAllowedUsageCount} onChange={this._onInputChange}>
+                    <option value="unlimited">Unlimited</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </Input>
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="description">Description</Label>
+                  <Input id="description" type="text" value={this.state.description} onChange={this._onInputChange} placeholder="E.g. Blog collaboration" />
                 </FormGroup>
 
                 {/*

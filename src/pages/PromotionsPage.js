@@ -11,6 +11,40 @@ import {
 import NavBar from '../components/NavBar'
 import { getPromotionCodes } from '../util/api'
 
+function formatUsages(usageCount, maxAllowedUsageCount) {
+  if (!_.isFinite(maxAllowedUsageCount)) {
+    return `${usageCount} / Unlimited`
+  }
+
+  return `${usageCount} / ${maxAllowedUsageCount}`
+}
+
+function formatExpiresAt(expiresAt) {
+  if (!expiresAt) {
+    return `Never`
+  }
+
+  return expiresAt
+}
+
+function formatMoney(cents) {
+  const val = (cents / 100).toFixed(2)
+  if (_.endsWith(val, '.00')) {
+    return `${Math.round(cents / 100)} €`
+  }
+
+  return `${val} €`
+}
+
+
+function formatValue(type, value) {
+  const label = type === 'FIXED'
+      ? `-${formatMoney(value)}`
+      : `-${Math.round(value * 100)} %`
+
+  return label
+}
+
 class PromotionsPage extends Component {
   constructor(props) {
     super(props)
@@ -60,10 +94,11 @@ class PromotionsPage extends Component {
                 <thead>
                   <tr>
                     <th>Promotion code</th>
-                    <th>Value</th>
+                    <th>Discount value</th>
                     <th>Usages</th>
                     <th>Expires at</th>
                     <th>Created at</th>
+                    <th>Description</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -71,10 +106,11 @@ class PromotionsPage extends Component {
                     _.map(this.state.promotions, (promotion) =>
                       <tr key={promotion.promotionCode}>
                         <td>{promotion.promotionCode}</td>
-                        <td>{(promotion.value / 100).toFixed(2)} €</td>
-                        <td>{promotion.usageCount} / {promotion.maxAllowedUsageCount}</td>
-                        <td>{promotion.expiresAt}</td>
+                        <td>{formatValue(promotion.type, promotion.value)}</td>
+                        <td>{formatUsages(promotion.usageCount, promotion.maxAllowedUsageCount)}</td>
+                        <td>{formatExpiresAt(promotion.expiresAt)}</td>
                         <td>{promotion.createdAt}</td>
+                        <td>{promotion.description}</td>
                       </tr>
                     )
                   }

@@ -5,6 +5,7 @@ export function getPromotionCodes() {
 }
 
 export function createNewPromotion(promotion) {
+  console.log('promotion', promotion)
   return axios.post('/api/promotions', promotion)
 }
 
