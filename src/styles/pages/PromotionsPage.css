@@ -18,3 +18,7 @@
   letter-spacing: 1px;
   font-family: 'Courier New';
 }
+
+.PromotionsPage__promotion-status .badge {
+  padding: 0.3rem 0.5rem;
+}

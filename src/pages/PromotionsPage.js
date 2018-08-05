@@ -69,6 +69,27 @@ class PromotionsPage extends Component {
     })
   }
 
+  _renderStatus(promotion) {
+    let text
+    let color = 'secondary'
+    const amountOfDaysOld = moment().diff(promotion.createdAt, 'days')
+
+    if (promotion.expiresAt && moment(promotion.expiresAt).diff(moment()) < 0) {
+      text = 'Expired'
+      color = 'success'
+    } else if (promotion.maxAllowedUsageCount && promotion.usageCount >= promotion.maxAllowedUsageCount) {
+      text = 'Used'
+      color = 'success'
+    } else if (promotion.usageCount < promotion.maxAllowedUsageCount && amountOfDaysOld > 30) {
+      text = 'Unused'
+      color = 'danger'
+    } else {
+      text = 'On-going'
+    }
+
+    return <Badge color={color}>{text}</Badge>
+  }
+
   componentDidMount() {
     getPromotions()
       .then((res) => {
@@ -107,6 +128,7 @@ class PromotionsPage extends Component {
               <Table>
                 <thead>
                   <tr>
+                    <th className="text-nowrap">Status</th>
                     <th className="text-nowrap">Promotion code</th>
                     <th className="text-nowrap">Type</th>
                     <th className="text-nowrap">Discount value</th>
@@ -120,9 +142,10 @@ class PromotionsPage extends Component {
                   {
                     _.map(this.state.promotions, (promotion) =>
                       <tr key={promotion.promotionCode}>
+                        <td className="text-nowrap PromotionsPage__promotion-status">{this._renderStatus(promotion)}</td>
                         <td className="text-nowrap PromotionsPage__promotion-code-row">{promotion.promotionCode}</td>
                         <td className="text-nowrap PromotionsPage__promotion-type-row">
-                          <Badge>{promotion.type === 'FIXED' ? '€' : '%'}</Badge>
+                          <Badge color="light">{promotion.type === 'FIXED' ? '€' : '%'}</Badge>
                         </td>
                         <td className="text-nowrap">{formatValue(promotion.type, promotion.value)}</td>
                         <td className="text-nowrap">{formatUsages(promotion.usageCount, promotion.maxAllowedUsageCount)}</td>
