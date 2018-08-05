@@ -76,6 +76,7 @@ app.get('/api/promotions', (req, res) => {
 
 app.post('/api/promotions', (req, res) => {
   request({
+    method: 'POST',
     url: config.ALVAR_CARTO_ORDER_API_BASE_URL + '/api/promotions',
     headers: {
       'x-api-key': config.ALVAR_CARTO_ORDER_API_SECRET,
