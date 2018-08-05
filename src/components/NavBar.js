@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import _ from 'lodash'
 import {
   Navbar,
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   DropdownMenu,
   DropdownToggle,
   DropdownItem,
