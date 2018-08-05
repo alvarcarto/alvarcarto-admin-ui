@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'reactstrap'
 import NavBar from '../components/NavBar'
-import { getPromotionCodes } from '../util/api'
+import { getPromotions } from '../util/api'
 
 function formatUsages(usageCount, maxAllowedUsageCount) {
   if (!_.isFinite(maxAllowedUsageCount)) {
@@ -70,7 +70,7 @@ class PromotionsPage extends Component {
   }
 
   componentDidMount() {
-    getPromotionCodes()
+    getPromotions()
       .then((res) => {
         this.setState({
           promotions: _.reverse(res.data),

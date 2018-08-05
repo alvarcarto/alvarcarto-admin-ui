@@ -14,7 +14,7 @@ import {
   Button,
 } from 'reactstrap'
 import NavBar from '../components/NavBar'
-import { createNewPromotion } from '../util/api'
+import { createPromotion, getPromotion } from '../util/api'
 
 // XXX: Use proper currency formatter
 function formatMoney(cents) {
@@ -56,43 +56,67 @@ class NewPromotionPage extends Component {
     this.setState({ promotionCode: stripped.toUpperCase() })
   }
 
-  _calculateValue() {
+  _calculateValueObject() {
     if (this.state.type === 'FIXED') {
-      return Number(this.state.fixedValue)
+      return {
+        value: Number(this.state.fixedValue),
+        label: `Gift code -${formatMoney(Number(this.state.fixedValue))}`,
+      }
     } else if (this.state.type === 'PERCENTAGE') {
-      return Number(this.state.percentageValue / 100)
+      return {
+        value: Math.round(Number(this.state.percentageValue) / 100),
+        label: `Promotion -${Math.round(Number(this.state.percentageValue) * 100)} %`,
+      }
     }
 
     throw new Error(`Unknown type: ${this.state.type}`)
   }
 
+  _calculateLabel() {
+
+  }
+
   _onSubmit = (event) => {
     event.preventDefault()
 
-    const label = this.state.type === 'FIXED'
-      ? `Gift code -${formatMoney(this.state.value, this.state.currency)}`
-      : `Promotion -${Math.round(this.state.value * 100)} %`
+    const valueObj = this._calculateValueObject()
 
-    createNewPromotion(_.omitBy({
-      label: label,
-      type: this.state.type,
-      value: this._calculateValue(),
-      promotionCode: this.state.promotionCode.toUpperCase(),
-      expiresAt: this.state.expiresAt,
-      description: this.state.description,
-      maxAllowedUsageCount: this.state.maxAllowedUsageCount === 'unlimited'
-        ? undefined
-        : Number(this.state.maxAllowedUsageCount),
-      currency: 'EUR',
-    }, isEmptyString))
+    const promotionCode = this.state.promotionCode.toUpperCase()
+    getPromotion(promotionCode)
+      .catch((err) => {
+        if (err.response.status !== 404) {
+          throw err
+        }
+
+        return err.response
+      })
+      .then((res) => {
+        if (res.status !== 404) {
+          throw new Error(`Promotion code ${promotionCode} already exists!`)
+        }
+
+        return createPromotion(_.omitBy({
+          label: valueObj.label,
+          type: this.state.type,
+          value: valueObj.value,
+          promotionCode: this.state.promotionCode.toUpperCase(),
+          expiresAt: this.state.expiresAt,
+          description: this.state.description,
+          maxAllowedUsageCount: this.state.maxAllowedUsageCount === 'unlimited'
+            ? undefined
+            : Number(this.state.maxAllowedUsageCount),
+          currency: 'EUR',
+        }, isEmptyString))
+      })
       .then((res) => {
         this.props.history.push('/')
       })
       .catch((err) => {
-        alert(`Error creating promotion: ${err}`)
+        this.setState({ loading: false })
+
+        alert(`${err}`)
         throw err
       })
-      .finally(() => this.setState({ loading: false }))
   }
 
   _renderValueInput() {

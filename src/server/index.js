@@ -68,15 +68,36 @@ app.get('/api/promotions', (req, res) => {
       res.json(response)
     })
     .catch((err) => {
-      console.error('Error', err)
-      res.status(500)
-      res.send(err)
+      console.error('Error', err.message)
+      res.status(err.response.statusCode)
+      res.send(err.response.body)
+    })
+})
+
+app.get('/api/promotions/:promotionCode', (req, res) => {
+  request({
+    url: `${config.ALVAR_CARTO_ORDER_API_BASE_URL}/api/promotions/${req.params.promotionCode}`,
+    headers: {
+      'x-api-key': config.ALVAR_CARTO_ORDER_API_SECRET,
+    },
+    json: true,
+  })
+    .then((response) => {
+      res.json(response)
+    })
+    .catch((err) => {
+      console.error('Error', err.message)
+      res.status(err.response.statusCode)
+      res.send(err.response.body)
     })
 })
 
 app.post('/api/promotions', (req, res) => {
   if (_.isString(req.body.description)) {
-    req.body.description += ` Created by ${req.headers['x-user-email']}.`
+    const trimmed = req.body.description.trim()
+    const maybeDot = _.endsWith(trimmed, '.') ? '' : '.'
+
+    req.body.description += `${maybeDot} Created by ${req.headers['x-user-email']}.`
   } else {
     req.body.description = `Created by ${req.headers['x-user-email']}.`
   }
@@ -95,9 +116,9 @@ app.post('/api/promotions', (req, res) => {
       res.json(response)
     })
     .catch((err) => {
-      console.error('Error', err)
-      res.status(500)
-      res.send(err)
+      console.error('Error', err.message)
+      res.status(err.response.statusCode)
+      res.send(err.response.body)
     })
 })
 
