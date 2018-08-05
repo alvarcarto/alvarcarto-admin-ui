@@ -18,6 +18,7 @@
     "eject": "react-scripts eject",
     "test": "echo \"Error: no test specified\""
   },
+  "postinstall": "npm run build",
   "author": "Alvar Carto",
   "license": "UNLICENSED",
   "dependencies": {
