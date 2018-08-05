@@ -9,6 +9,9 @@ import {
   FormGroup,
   Label,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
   Button,
 } from 'reactstrap'
 import NavBar from '../components/NavBar'
@@ -33,7 +36,8 @@ class NewPromotionPage extends Component {
     super(props)
 
     this.state = {
-      value: '',
+      fixedValue: '',
+      percentageValue: '',
       type: 'FIXED',
       expiresAt: '',
       promotionCode: '',
@@ -50,7 +54,17 @@ class NewPromotionPage extends Component {
   _onPromotionCodeChange = (event) => {
     const { value } = event.target
     const stripped = value.replace(/[^A-Z0-9]+/i, '')
-    this.setState({ promotionCode: stripped })
+    this.setState({ promotionCode: stripped.toUpperCase() })
+  }
+
+  _calculateValue() {
+    if (this.state.type === 'FIXED') {
+      return Number(this.state.fixedValue)
+    } else if (this.state.type === 'PERCENTAGE') {
+      return Number(this.state.percentageValue / 100)
+    }
+
+    throw new Error(`Unknown type: ${this.state.type}`)
   }
 
   _onSubmit = (event) => {
@@ -63,7 +77,7 @@ class NewPromotionPage extends Component {
     createNewPromotion(_.omitBy({
       label: label,
       type: this.state.type,
-      value: Number(this.state.value),
+      value: this._calculateValue(),
       promotionCode: this.state.promotionCode.toUpperCase(),
       expiresAt: this.state.expiresAt,
       description: this.state.description,
@@ -82,39 +96,61 @@ class NewPromotionPage extends Component {
       .finally(() => this.setState({ loading: false }))
   }
 
+  _renderValueInput() {
+    if (this.state.type === 'FIXED') {
+      return <FormGroup>
+        <Label for="fixedValue">Value</Label>
+        <InputGroup>
+          <Input id="fixedValue" type="number" required value={this.state.fixedValue} onChange={this._onInputChange} placeholder="Discount as €" />
+          <InputGroupAddon addonType="append">
+            <InputGroupText>€</InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+
+      </FormGroup>
+    }
+
+    return <FormGroup>
+      <Label for="percentageValue">Value</Label>
+      <InputGroup>
+        <Input id="percentageValue" type="number" required value={this.state.percentageValue} onChange={this._onInputChange} placeholder="Discount as %" />
+        <InputGroupAddon addonType="append">
+          <InputGroupText>%</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    </FormGroup>
+  }
+
   render() {
     return (
       <div className="NewPromotionPage">
         <NavBar />
 
         <Container className="NewPromotionPage__content">
-          <Row>
-              <Col>
-                <h1>Create new promotion</h1>
-              </Col>
-            </Row>
+          <Row className="NewPromotionPage__header-section">
+            <Col>
+              <h1>Create new promotion</h1>
+            </Col>
+          </Row>
 
           <Row>
             <Col>
               <Form onSubmit={this._onSubmit}>
                 <FormGroup>
                   <Label for="promotionCode">Promotion code</Label>
-                  <Input id="promotionCode" type="text" required value={this.state.promotionCode} onChange={this._onPromotionCodeChange} pattern="[A-Za-z0-9]+" placeholder="E.g. SUMMER10 (Only letters and numbers)" />
+                  <Input id="promotionCode" type="text" required value={this.state.promotionCode} onChange={this._onPromotionCodeChange} pattern="[A-Za-z0-9]+" placeholder="E.g. SUMMER10 or SAMANTHABLOG0297" />
                 </FormGroup>
 
                 <FormGroup>
                   <Label for="type">Type</Label>
 
                   <Input type="select" name="type" id="type" value={this.state.type} onChange={this._onInputChange}>
-                    <option value="FIXED">Fixed</option>
-                    <option value="PERCENTAGE">Percentage</option>
+                    <option value="FIXED">Fixed (€)</option>
+                    <option value="PERCENTAGE">Percentage (%)</option>
                   </Input>
                 </FormGroup>
 
-                <FormGroup>
-                  <Label for="value">Value</Label>
-                  <Input id="value" type="number" required value={this.state.value} onChange={this._onInputChange} />
-                </FormGroup>
+                { this._renderValueInput() }
 
                 <FormGroup>
                   <Label for="type">Max usages</Label>
@@ -141,7 +177,7 @@ class NewPromotionPage extends Component {
                   </FormGroup>
                 */}
 
-                <Row>
+                <Row className="NewPromotionPage__create-container">
                   <Col sm={{ size: 'auto' }}>
                     <Button color="primary" disabled={this.state.loading}>
                       { this.state.loading ? 'Creating..' : 'Create new promotion' }

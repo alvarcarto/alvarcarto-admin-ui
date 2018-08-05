@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import moment from 'moment'
 import { Link } from 'react-router-dom'
 import {
   Container,
   Row,
   Col,
+  Badge,
   Table,
   Button,
+  Tooltip,
 } from 'reactstrap'
 import NavBar from '../components/NavBar'
 import { getPromotionCodes } from '../util/api'
@@ -24,7 +27,7 @@ function formatExpiresAt(expiresAt) {
     return `Never`
   }
 
-  return expiresAt
+  return moment(expiresAt).format('LLL')
 }
 
 function formatMoney(cents) {
@@ -52,14 +55,25 @@ class PromotionsPage extends Component {
     this.state = {
       promotions: [],
       loading: true,
+      tooltipOpenForPromotionCode: null,
     }
+  }
+
+  _toggleTooltip = (code) => {
+    const newVal = code === this.state.tooltipOpenForPromotionCode
+      ? null
+      : code
+
+    this.setState({
+      tooltipOpenForPromotionCode: newVal,
+    })
   }
 
   componentDidMount() {
     getPromotionCodes()
       .then((res) => {
         this.setState({
-          promotions: res.data,
+          promotions: _.reverse(res.data),
           loading: false,
         })
       })
@@ -94,6 +108,7 @@ class PromotionsPage extends Component {
                 <thead>
                   <tr>
                     <th>Promotion code</th>
+                    <th>Type</th>
                     <th>Discount value</th>
                     <th>Usages</th>
                     <th>Expires at</th>
@@ -105,11 +120,19 @@ class PromotionsPage extends Component {
                   {
                     _.map(this.state.promotions, (promotion) =>
                       <tr key={promotion.promotionCode}>
-                        <td>{promotion.promotionCode}</td>
+                        <td className="PromotionsPage__promotion-code-row">{promotion.promotionCode}</td>
+                        <td className="PromotionsPage__promotion-type-row">
+                          <Badge>{promotion.type === 'FIXED' ? '€' : '%'}</Badge>
+                        </td>
                         <td>{formatValue(promotion.type, promotion.value)}</td>
                         <td>{formatUsages(promotion.usageCount, promotion.maxAllowedUsageCount)}</td>
                         <td>{formatExpiresAt(promotion.expiresAt)}</td>
-                        <td>{promotion.createdAt}</td>
+                        <td>
+                          <span id={`date-tooltip-${promotion.promotionCode}`}>{moment(promotion.createdAt).fromNow()}</span>
+                          <Tooltip placement="top" isOpen={this.state.tooltipOpenForPromotionCode === promotion.promotionCode} toggle={() => this._toggleTooltip(promotion.promotionCode)} target={`date-tooltip-${promotion.promotionCode}`}>
+                            {moment(promotion.createdAt).format('LLL')}
+                          </Tooltip>
+                        </td>
                         <td>{promotion.description}</td>
                       </tr>
                     )

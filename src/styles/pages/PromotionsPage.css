@@ -1,5 +1,6 @@
 .PromotionsPage__content {
   padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .PromotionsPage__new {
@@ -10,4 +11,9 @@
 
 .PromotionsPage__table-section {
 	padding-top: 30px;
+}
+
+.PromotionsPage__promotion-code-row {
+  font-weight: 900;
+  letter-spacing: 1px;
 }

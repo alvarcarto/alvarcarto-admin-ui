@@ -85,6 +85,7 @@ app.post('/api/promotions', (req, res) => {
     json: true,
   })
     .then((response) => {
+      console.log(`${req.headers['x-user-email']} created a new promotion ${req.body.promotionCode}`)
       res.json(response)
     })
     .catch((err) => {

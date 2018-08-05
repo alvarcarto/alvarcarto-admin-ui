@@ -1,3 +1,8 @@
+.NavBar {
+  background-color: #f9f9f9 !important;
+  padding: 1.3rem 1rem;
+}
+
 .NavBar__brand {
 	display: flex;
 	justify-content: center;

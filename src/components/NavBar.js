@@ -41,7 +41,7 @@ class NavBar extends Component {
   }
 
   render() {
-    return <Navbar color="light" light>
+    return <Navbar className="NavBar" color="light" light>
       <NavbarBrand className="NavBar__brand" href="/">
         <img className="NavBar__logo" src={`${config.PUBLIC_URL}/assets/alvarcarto-logo-dark.svg`} alt="Alvar Carto" />
       </NavbarBrand>

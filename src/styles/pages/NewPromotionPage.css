@@ -1,7 +1,32 @@
 .NewPromotionPage__content {
   padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.NewPromotionPage__header-section {
+  margin-bottom: 40px;
 }
 
 .NewPromotionPage input#promotionCode {
-  text-transform: uppercase;
+  max-width: 330px;
+}
+
+.NewPromotionPage select#type {
+  max-width: 200px;
+}
+
+.NewPromotionPage input#percentageValue, .NewPromotionPage input#fixedValue {
+  max-width: 140px;
+}
+
+.NewPromotionPage select#maxAllowedUsageCount {
+  max-width: 200px;
+}
+
+.NewPromotionPage input#description {
+  max-width: 700px;
+}
+
+.NewPromotionPage__create-container {
+  margin-top: 30px;
 }
