@@ -75,6 +75,12 @@ app.get('/api/promotions', (req, res) => {
 })
 
 app.post('/api/promotions', (req, res) => {
+  if (_.isString(req.body.description)) {
+    req.body.description += ` Created by ${req.headers['x-user-email']}.`
+  } else {
+    req.body.description = `Created by ${req.headers['x-user-email']}.`
+  }
+
   request({
     method: 'POST',
     url: config.ALVAR_CARTO_ORDER_API_BASE_URL + '/api/promotions',
