@@ -9,7 +9,7 @@
     }
   },
   "scripts": {
-    "start-prod": "npm run build && node src/server/index.js",
+    "start-prod": "node src/server/index.js",
     "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
     "start-backend": "nodemon --watch ./src/server -e js ./src/server/index.js",
     "start-frontend": "react-scripts start",
