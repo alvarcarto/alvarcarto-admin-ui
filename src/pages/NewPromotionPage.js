@@ -58,30 +58,30 @@ class NewPromotionPage extends Component {
 
   _calculateValueObject() {
     if (this.state.type === 'FIXED') {
+      const cents = Number(this.state.fixedValue) * 100
       return {
-        value: Number(this.state.fixedValue),
-        label: `Gift code -${formatMoney(Number(this.state.fixedValue))}`,
+        value: cents,
+        label: `Gift code -${formatMoney(cents)}`,
       }
     } else if (this.state.type === 'PERCENTAGE') {
       return {
-        value: Math.round(Number(this.state.percentageValue) / 100),
-        label: `Promotion -${Math.round(Number(this.state.percentageValue) * 100)} %`,
+        // Don't allow fractional percentages such as 10.2%, round them to e.g. 10%
+        value: Number((Number(this.state.percentageValue) / 100).toFixed(2)),
+        label: `Promotion -${Math.round(Number(this.state.percentageValue))} %`,
       }
     }
 
     throw new Error(`Unknown type: ${this.state.type}`)
   }
 
-  _calculateLabel() {
-
-  }
-
   _onSubmit = (event) => {
     event.preventDefault()
 
     const valueObj = this._calculateValueObject()
-
     const promotionCode = this.state.promotionCode.toUpperCase()
+
+    console.log('valueObj', valueObj)
+
     getPromotion(promotionCode)
       .catch((err) => {
         if (err.response.status !== 404) {
