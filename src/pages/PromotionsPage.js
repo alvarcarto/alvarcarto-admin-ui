@@ -145,7 +145,7 @@ class PromotionsPage extends Component {
                         <td className="text-nowrap PromotionsPage__promotion-status">{this._renderStatus(promotion)}</td>
                         <td className="text-nowrap PromotionsPage__promotion-code-row">{promotion.promotionCode}</td>
                         <td className="text-nowrap PromotionsPage__promotion-type-row">
-                          <Badge color="light">{promotion.type === 'FIXED' ? '€' : '%'}</Badge>
+                          <Badge color="light" pill>{promotion.type === 'FIXED' ? '€' : '%'}</Badge>
                         </td>
                         <td className="text-nowrap">{formatValue(promotion.type, promotion.value)}</td>
                         <td className="text-nowrap">{formatUsages(promotion.usageCount, promotion.maxAllowedUsageCount)}</td>
