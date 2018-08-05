@@ -35,13 +35,13 @@ class NewPromotionPage extends Component {
     super(props)
 
     this.state = {
-      fixedValue: '',
+      fixedValue: '69',
       percentageValue: '',
       type: 'FIXED',
       expiresAt: '',
       promotionCode: '',
-      maxAllowedUsageCount: 'unlimited',
-      description: '',
+      maxAllowedUsageCount: '2',
+      description: 'Blog collaboration.',
       loading: false,
     }
   }
@@ -79,8 +79,6 @@ class NewPromotionPage extends Component {
 
     const valueObj = this._calculateValueObject()
     const promotionCode = this.state.promotionCode.toUpperCase()
-
-    console.log('valueObj', valueObj)
 
     getPromotion(promotionCode)
       .catch((err) => {
