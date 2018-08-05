@@ -80,9 +80,12 @@ class PromotionsPage extends Component {
     } else if (promotion.maxAllowedUsageCount && promotion.usageCount >= promotion.maxAllowedUsageCount) {
       text = 'Used'
       color = 'success'
-    } else if (promotion.usageCount < promotion.maxAllowedUsageCount && amountOfDaysOld > 30) {
+    } else if (promotion.usageCount === 0 && amountOfDaysOld > 30) {
       text = 'Unused'
       color = 'danger'
+    } else if (promotion.usageCount < promotion.maxAllowedUsageCount && amountOfDaysOld > 30) {
+      text = 'Usages left'
+      color = 'warning'
     } else {
       text = 'On-going'
     }
