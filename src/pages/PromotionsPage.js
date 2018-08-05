@@ -76,10 +76,8 @@ class PromotionsPage extends Component {
 
     if (promotion.expiresAt && moment(promotion.expiresAt).diff(moment()) < 0) {
       text = 'Expired'
-      color = 'success'
     } else if (promotion.maxAllowedUsageCount && promotion.usageCount >= promotion.maxAllowedUsageCount) {
       text = 'Used'
-      color = 'success'
     } else if (promotion.usageCount === 0 && amountOfDaysOld > 30) {
       text = 'Unused'
       color = 'danger'
@@ -88,6 +86,7 @@ class PromotionsPage extends Component {
       color = 'warning'
     } else {
       text = 'On-going'
+      color = 'success'
     }
 
     return <Badge color={color}>{text}</Badge>
