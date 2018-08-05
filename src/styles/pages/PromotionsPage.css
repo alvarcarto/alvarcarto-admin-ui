@@ -14,6 +14,7 @@
 }
 
 .PromotionsPage__promotion-code-row {
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 1px;
+  font-family: 'Courier New';
 }

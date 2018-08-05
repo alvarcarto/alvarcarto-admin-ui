@@ -107,27 +107,27 @@ class PromotionsPage extends Component {
               <Table>
                 <thead>
                   <tr>
-                    <th>Promotion code</th>
-                    <th>Type</th>
-                    <th>Discount value</th>
-                    <th>Usages</th>
-                    <th>Expires at</th>
-                    <th>Created at</th>
-                    <th>Description</th>
+                    <th className="text-nowrap">Promotion code</th>
+                    <th className="text-nowrap">Type</th>
+                    <th className="text-nowrap">Discount value</th>
+                    <th className="text-nowrap">Usages</th>
+                    <th className="text-nowrap">Expires at</th>
+                    <th className="text-nowrap">Created at</th>
+                    <th className="text-nowrap">Description</th>
                   </tr>
                 </thead>
                 <tbody>
                   {
                     _.map(this.state.promotions, (promotion) =>
                       <tr key={promotion.promotionCode}>
-                        <td className="PromotionsPage__promotion-code-row">{promotion.promotionCode}</td>
-                        <td className="PromotionsPage__promotion-type-row">
+                        <td className="text-nowrap PromotionsPage__promotion-code-row">{promotion.promotionCode}</td>
+                        <td className="text-nowrap PromotionsPage__promotion-type-row">
                           <Badge>{promotion.type === 'FIXED' ? '€' : '%'}</Badge>
                         </td>
-                        <td>{formatValue(promotion.type, promotion.value)}</td>
-                        <td>{formatUsages(promotion.usageCount, promotion.maxAllowedUsageCount)}</td>
-                        <td>{formatExpiresAt(promotion.expiresAt)}</td>
-                        <td>
+                        <td className="text-nowrap">{formatValue(promotion.type, promotion.value)}</td>
+                        <td className="text-nowrap">{formatUsages(promotion.usageCount, promotion.maxAllowedUsageCount)}</td>
+                        <td className="text-nowrap">{formatExpiresAt(promotion.expiresAt)}</td>
+                        <td className="text-nowrap">
                           <span id={`date-tooltip-${promotion.promotionCode}`}>{moment(promotion.createdAt).fromNow()}</span>
                           <Tooltip placement="top" isOpen={this.state.tooltipOpenForPromotionCode === promotion.promotionCode} toggle={() => this._toggleTooltip(promotion.promotionCode)} target={`date-tooltip-${promotion.promotionCode}`}>
                             {moment(promotion.createdAt).format('LLL')}
