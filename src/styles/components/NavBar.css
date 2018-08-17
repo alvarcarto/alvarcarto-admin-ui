@@ -21,6 +21,10 @@
 	top: 1px;
 }
 
+.NavBar__links .nav-item:not(:last-child) {
+  margin-right: 40px;
+}
+
 .NavBar__name {
   margin-right: 10px;
 }

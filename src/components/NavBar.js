@@ -4,6 +4,7 @@ import {
   Navbar,
   NavbarBrand,
   Nav,
+  NavLink,
   NavItem,
   DropdownMenu,
   DropdownToggle,
@@ -39,12 +40,17 @@ class NavBar extends Component {
   }
 
   render() {
+    const apiKey = _.get(this.state, 'user.apiKey', undefined)
+
     return <Navbar className="NavBar" color="light" light>
       <NavbarBrand className="NavBar__brand" href="/">
         <img className="NavBar__logo" src={`${config.PUBLIC_URL}/assets/alvarcarto-logo-dark.svg`} alt="Alvar Carto" />
       </NavbarBrand>
 
       <Nav className="NavBar__links" navbar>
+        <NavItem>
+          <NavLink disabled={_.isUndefined(apiKey)} href={`https://design.alvarcarto.com?debug=true&apiKey=${apiKey}`}>Designer</NavLink>
+        </NavItem>
         <UncontrolledDropdown className="NavBar__name" nav>
           <DropdownToggle nav caret>
             {_.get(this.state, 'user.name', 'Name').split(' ')[0]}

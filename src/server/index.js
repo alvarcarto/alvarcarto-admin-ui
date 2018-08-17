@@ -53,6 +53,7 @@ app.get('/api/me', (req, res) => {
     name: req.headers['x-user-name'],
     email: req.headers['x-user-email'],
     photoUrl: req.headers['x-user-photo-url'],
+    apiKey: config.ALVAR_CARTO_TILE_API_SECRET,
   })
 })
 

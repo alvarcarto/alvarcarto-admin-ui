@@ -6,6 +6,7 @@ const config = {
   // Required
   ALVAR_CARTO_ORDER_API_BASE_URL: getRequiredEnv('ALVAR_CARTO_ORDER_API_BASE_URL', string),
   ALVAR_CARTO_ORDER_API_SECRET: getRequiredEnv('ALVAR_CARTO_ORDER_API_SECRET', string),
+  ALVAR_CARTO_TILE_API_SECRET: getRequiredEnv('ALVAR_CARTO_TILE_API_SECRET', string),
   KEYS: getRequiredEnv('KEYS', string),
 
   // Optional
